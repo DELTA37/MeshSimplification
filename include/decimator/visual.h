@@ -5,9 +5,10 @@ namespace decimator {
 
 template<typename Polyhedron>
 void visualize(Polyhedron const& ply) {
-  ofstream out("tmp.off");
+  std::ofstream out("tmp.off");
   out << ply; 
-  std::system("tmp.off");
+  std::system("geomview tmp.off");
 }
+
 
 } // decimator

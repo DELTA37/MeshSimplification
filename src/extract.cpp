@@ -1,4 +1,4 @@
-#include <decimator/visual.h>
+#include <decimator/extract.h>
 
 namespace decimator {
 

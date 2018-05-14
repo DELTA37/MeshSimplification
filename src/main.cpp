@@ -3,12 +3,14 @@
 #include <Eigen/Dense>
 #include <boost/program_options.hpp>
 
-#include <decimation/visual.h>
+#include <decimator/visual.h>
+#include <decimator/extract.h>
 
 #include <iostream>
 #include <utility>
 #include <vector>
 #include <fstream>
+#include <string>
 
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Polyhedron_3.h>
@@ -34,9 +36,9 @@ int main(int argc, char* argv[]) {
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
 
-  std::string&& fname = vm["filename"].as<std::string>();
+  std::string fname = vm["filename"].as<std::string>();
   std::ifstream in(fname);
-  auto&& points = extract(in);
+  auto&& points = decimator::extract(in);
   return 0;
 }
 
