@@ -1,0 +1,9 @@
+cmake_minimum_required(VERSION 3.10.2)
+find_package (Boost COMPONENTS program_options REQUIRED)
+find_package(CGAL REQUIRED COMPONENTS Core)
+find_package(Eigen3 3.1.0 REQUIRED)
+include( ${CGAL_USE_FILE} )
+
+add_executable(prog src/main.cpp)
+include_directories(include)
+target_link_libraries(prog ${Boost_LIBRARIES})

@@ -1,6 +1,10 @@
 # Prerequisites
 *.d
 
+build
+third-party
+data
+
 # Compiled Object files
 *.slo
 *.lo
