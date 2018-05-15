@@ -37,8 +37,8 @@ int main(int argc, char* argv[]) {
   po::notify(vm);
 
   std::string fname = vm["filename"].as<std::string>();
-  std::ifstream in(fname);
-  auto&& points = decimator::extract(in);
+  auto&& mesh = decimator::extract(fname.c_str());
+  decimator::visualize(mesh);
   return 0;
 }
 
