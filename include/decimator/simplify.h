@@ -70,7 +70,7 @@ struct CustomVisitor : SMS::Edge_collapse_visitor_base<Surface_mesh> {
   }                
   
   void OnCollapsing(Profile const& , boost::optional<Point> placement) {
-    if ( !placement )
+    if (!placement)
       ++stats->placement_uncomputable;
   }                
   

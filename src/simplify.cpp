@@ -11,13 +11,14 @@ Surface_mesh simplify(Surface_mesh surface_mesh, float edges_percentil) {
 
   SMS::Count_ratio_stop_predicate<Surface_mesh> stop(0.1);
  
-  Stats stats ;
+  Stats stats;
   
-  CustomVisitor vis(&stats) ;
+  CustomVisitor vis(&stats);
   int r = SMS::edge_collapse(surface_mesh, stop, 
     CGAL::parameters::get_cost(SMS::Edge_length_cost<Surface_mesh>())
     .get_placement(SMS::Midpoint_placement<Surface_mesh>())
-    .visitor(vis));
+    .visitor(vis)
+  );
 
   std::cout << "\nEdges collected: "  << stats.collected
             << "\nEdges proccessed: " << stats.processed
@@ -30,7 +31,8 @@ Surface_mesh simplify(Surface_mesh surface_mesh, float edges_percentil) {
             
   std::cout << "\nFinished...\n" << r << " edges removed.\n" 
             << surface_mesh.number_of_edges() << " final edges.\n";
- 
+
+  surface_mesh.collect_garbage();
   return surface_mesh;
 }
 
