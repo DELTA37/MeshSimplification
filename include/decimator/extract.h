@@ -1,4 +1,4 @@
-#include <Eigen/Dense>
+//#include <eigen3/Eigen/Dense>
 #include <vector>
 #include <utility>
 #include <array>
@@ -22,8 +22,8 @@
 namespace decimator {
 
 constexpr size_t READ_BUFFER_CONSTANT = 100000;
-
-typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
+typedef CGAL::Simple_cartesian<double> Kernel;
+//typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
 
 typedef Kernel::FT FT;
 typedef Kernel::Point_3 Point;
@@ -139,6 +139,42 @@ Mesh extract(char const* fname) {
   ply_close(ply); 
 
   return m;
+}
+
+void store(const Mesh &m, char const* fname)
+{
+  p_ply ply = ply_create(fname, PLY_ASCII, NULL, 0, NULL);
+
+  ply_add_element(ply, "vertex", m.number_of_vertices());
+  ply_add_property(ply, "x", PLY_FLOAT, PLY_FLOAT, PLY_FLOAT);
+  ply_add_property(ply, "y", PLY_FLOAT, PLY_FLOAT, PLY_FLOAT);
+  ply_add_property(ply, "z", PLY_FLOAT, PLY_FLOAT, PLY_FLOAT);
+  //ply_add_property(ply, "nx", PLY_FLOAT, NULL, NULL);
+  //ply_add_property(ply, "ny", PLY_FLOAT, NULL, NULL);
+  //ply_add_property(ply, "nz", PLY_FLOAT, NULL, NULL);
+
+  ply_add_element(ply, "face", m.number_of_faces());
+  ply_add_list_property(ply, "vertex_indices", PLY_UCHAR, PLY_INT);
+
+  ply_write_header(ply);
+
+  for (auto it = m.vertices().begin(); it != m.vertices().end(); it++) {
+    ply_write(ply, m.point(*it)[0]);
+    ply_write(ply, m.point(*it)[1]);
+    ply_write(ply, m.point(*it)[2]);
+  }
+
+  for (auto it = m.faces().begin(); it != m.faces().end(); it++) {
+    ply_write(ply, 3);
+    auto halfedge = m.halfedge(*it);
+    ply_write(ply, m.target(halfedge));
+    halfedge = m.next(halfedge);
+    ply_write(ply, m.target(halfedge));
+    halfedge = m.next(halfedge);
+    ply_write(ply, m.target(halfedge));
+  }
+
+  ply_close(ply);
 }
 
 } // decimator

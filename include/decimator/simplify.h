@@ -3,10 +3,10 @@
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+//#include <OpenMesh/Core/IO/MeshIO.hh>
+//#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 
-#include <CGAL/boost/graph/graph_traits_PolyMesh_ArrayKernelT.h>
+//#include <CGAL/boost/graph/graph_traits_PolyMesh_ArrayKernelT.h>
 
 #include <CGAL/Surface_mesh_simplification/edge_collapse.h>
 #include <CGAL/Surface_mesh_simplification/Policies/Edge_collapse/Count_ratio_stop_predicate.h>

@@ -34,3 +34,6 @@ data
 *.exe
 *.out
 *.app
+
+# Code redactors
+.vscode

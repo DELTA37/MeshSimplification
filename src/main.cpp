@@ -1,10 +1,11 @@
-#include <yaply/YaPLY.hpp>
+//#include <yaply/YaPLY.hpp>
 #include <iostream>
-#include <Eigen/Dense>
+//#include <eigen3/Eigen/Dense>
 #include <boost/program_options.hpp>
 
 #include <decimator/visual.h>
 #include <decimator/extract.h>
+#include <decimator/simplify.h>
 
 #include <iostream>
 #include <utility>
@@ -44,7 +45,9 @@ int main(int argc, char* argv[]) {
   if (vm.count("filename")) {
     std::string fname = vm["filename"].as<std::string>();
     auto&& mesh = decimator::extract(fname.c_str());
-    decimator::visualize(mesh);
+    //decimator::visualize(mesh);
+    auto&& simplified_mesh = decimator::simplify(mesh, 0.5);
+    decimator::store(mesh, "out.ply");
   } else {
     std::cout << desc << "\n";
     return 1;
