@@ -1,56 +1,37 @@
+#include <decimator/simplify.h>
+
+namespace decimator {
 
 
-typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-
-typedef OpenMesh::PolyMesh_ArrayKernelT</* MyTraits*/> Surface_mesh;
-
-typedef boost::graph_traits<Surface_mesh>::edge_descriptor edge_descriptor;
-typedef boost::graph_traits<Surface_mesh>::edge_iterator edge_iterator;
-
-
-Constrained_edge_map::Constrained_edge_map( Surface_mesh& sm ): sm_( sm )
-{
-    sm_.add_property( constraint );
-}
-
-reference Constrained_edge_map::get( const Constrained_edge_map& em, key_type e )
-{
-    bool b = em.sm_.property( em.constraint, em.sm_.edge_handle( e.idx() ) );
-    return b;
-}
-
-void Constrained_edge_map::put( const Constrained_edge_map& em, key_type e, value_type b )
-{
-    em.sm_.property( em.constraint, em.sm_.edge_handle( e.idx() ) ) = b;
-}
-
-
-namespace SMS = CGAL::Surface_mesh_simplification ;
-
-
-Surface_mesh simplify(Surface_mesh surface_mesh, float )
-{
-    Constrained_edge_map constraints_map( surface_mesh stop_predicate);
-
-    edge_iterator b, e;
-    int count = 0;
-    for( boost::tie( b, e ) = edges( surface_mesh ); b != e; ++b )
-    {
-        put( constraints_map, *b, ( count++ < 100 ) );
-    }
-
-    SMS::Count_stop_predicate<Surface_mesh> stop( surface_mesh.n_faces() * edges_percentil );
-
-    int r = SMS::edge_collapse
-            ( surface_mesh
-              , stop
-              , CGAL::parameters::halfedge_index_map  ( get( CGAL::halfedge_index  , surface_mesh ) )
-              .vertex_point_map( get( boost::vertex_point, surface_mesh ) )
-              .edge_is_constrained_map( constraints_map )
-            );
-
-    surface_mesh.garbage_collection();
-
+Surface_mesh simplify(Surface_mesh surface_mesh, float edges_percentil) {
+  if (!CGAL::is_triangle_mesh(surface_mesh)){
+    std::cerr << "Input geometry is not triangulated." << std::endl;
     return surface_mesh;
+  }
+
+  SMS::Count_ratio_stop_predicate<Surface_mesh> stop(0.1);
+ 
+  Stats stats ;
+  
+  CustomVisitor vis(&stats) ;
+  int r = SMS::edge_collapse(surface_mesh, stop, 
+    CGAL::parameters::get_cost(SMS::Edge_length_cost<Surface_mesh>())
+    .get_placement(SMS::Midpoint_placement<Surface_mesh>())
+    .visitor(vis));
+
+  std::cout << "\nEdges collected: "  << stats.collected
+            << "\nEdges proccessed: " << stats.processed
+            << "\nEdges collapsed: "  << stats.collapsed
+            << std::endl
+            << "\nEdges not collapsed due to topological constraints: "  << stats.non_collapsable
+            << "\nEdge not collapsed due to cost computation constraints: "  << stats.cost_uncomputable 
+            << "\nEdge not collapsed due to placement computation constraints: " << stats.placement_uncomputable 
+            << std::endl ; 
+            
+  std::cout << "\nFinished...\n" << r << " edges removed.\n" 
+            << surface_mesh.number_of_edges() << " final edges.\n";
+ 
+  return surface_mesh;
 }
 
+} // decimator

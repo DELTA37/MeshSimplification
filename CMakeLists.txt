@@ -5,7 +5,7 @@ find_package(CGAL REQUIRED COMPONENTS Core)
 find_package(Eigen3 3.1.0 REQUIRED)
 include( ${CGAL_USE_FILE} )
 
-add_executable(prog src/main.cpp src/rply.c)
+add_executable(prog src/main.cpp src/rply.c src/simplify.cpp)
 include_directories(include)
 target_link_libraries(prog ${Boost_LIBRARIES})
 target_link_libraries(prog boost_program_options)
