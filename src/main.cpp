@@ -35,10 +35,21 @@ int main(int argc, char* argv[]) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
+  
+  if (vm.count("help")) {
+    std::cout << desc << "\n";
+    return 1;
+  }
 
-  std::string fname = vm["filename"].as<std::string>();
-  auto&& mesh = decimator::extract(fname.c_str());
-  decimator::visualize(mesh);
+  if (vm.count("filename")) {
+    std::string fname = vm["filename"].as<std::string>();
+    auto&& mesh = decimator::extract(fname.c_str());
+    decimator::visualize(mesh);
+  } else {
+    std::cout << desc << "\n";
+    return 1;
+  }
+
   return 0;
 }
 
