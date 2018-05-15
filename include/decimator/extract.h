@@ -93,10 +93,11 @@ static int vertex_cb(p_ply_argument argument) {
   point = point_args->second;
 
   (*point)[ind] = ply_get_argument_value(argument);
+  //std::cout << (*point)[0] << std::endl << (*point)[1] << std::endl << (*point)[2] << std::endl;
   if (ind == 2) {
     m->add_vertex(Point((*point)[0], (*point)[1], (*point)[2]));
   }
-  return 0;
+  return 1;
 }
 
 static int face_cb(p_ply_argument argument) {
@@ -114,7 +115,7 @@ static int face_cb(p_ply_argument argument) {
   if (ind == 2) {
     m->add_face((*facet)[0], (*facet)[1], (*facet)[2]);
   }
-  return 0;
+  return 1;
 }
 
 
