@@ -46,8 +46,8 @@ int main(int argc, char* argv[]) {
     std::string fname = vm["filename"].as<std::string>();
     auto&& mesh = decimator::extract(fname.c_str());
     //decimator::visualize(mesh);
-    //auto&& simplified_mesh = decimator::simplify(mesh, 0.5);
-    decimator::store(mesh, "out.ply");
+    auto&& simplified_mesh = decimator::simplify(mesh, 0.5);
+    decimator::store(simplified_mesh, "out.ply");
   } else {
     std::cout << desc << "\n";
     return 1;

@@ -106,7 +106,8 @@ static int face_cb(p_ply_argument argument) {
   Mesh* m;
 
   std::pair<Mesh*, Facet*>* facet_args;
-  ply_get_argument_user_data(argument, reinterpret_cast<void**>(&facet_args), &ind);
+  ply_get_argument_user_data(argument, reinterpret_cast<void**>(&facet_args), NULL);
+  ply_get_argument_property(argument, NULL, NULL, &ind);
 
   m = facet_args->first;
   facet = facet_args->second;
