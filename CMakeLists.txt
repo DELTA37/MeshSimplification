@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.10.2)
+add_definitions("-std=c++11 -O3")
 find_package (Boost COMPONENTS program_options REQUIRED)
 find_package(CGAL REQUIRED COMPONENTS Core)
 find_package(Eigen3 3.1.0 REQUIRED)
 include( ${CGAL_USE_FILE} )
 
-add_executable(prog src/main.cpp)
+add_executable(prog src/main.cpp src/rply.c)
 include_directories(include)
 target_link_libraries(prog ${Boost_LIBRARIES})
 target_link_libraries(prog boost_program_options)
